@@ -43,9 +43,9 @@
         }
         if([[column.columnClass description] isEqualToString:@"NSString"]){
             NSString *value = [NSString stringWithFormat:
-                               @"%@_%d_%d", 
+                               @"%@_%ld_%d", 
                                column.columnName, 
-                               time(0), 
+                               time(0),
                                aSeed];
             [aRecord setValue:value forKey:column.columnName];
         }else if([[column.columnClass description] isEqualToString:@"NSNumber"]){

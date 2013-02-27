@@ -250,7 +250,7 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
     [sqlString appendFormat:
      @"%@ %s", 
      [aColumn quotedString],
-     [column.columnClass performSelector:@selector(sqlType)]];
+     (const char *)[column.columnClass performSelector:@selector(sqlType)]];
     return [sqlString UTF8String];
 }
 
@@ -267,7 +267,7 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
         if(![column.columnName isEqualToString:@"id"]){
             [sqlString appendFormat:@", %@ %s", 
              [column.columnName quotedString], 
-            [column.columnClass performSelector:@selector(sqlType)]];
+            (const char *)[column.columnClass performSelector:@selector(sqlType)]];
         }
     }
     [sqlString appendFormat:@")"];

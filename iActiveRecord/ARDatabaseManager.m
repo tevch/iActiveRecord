@@ -18,7 +18,6 @@
 
 @implementation ARDatabaseManager
 
-static ARDatabaseManager *instance = nil;
 static BOOL useCacheDirectory = YES;
 static NSString *databaseName = DEFAULT_DBNAME;
 
