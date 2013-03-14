@@ -36,6 +36,7 @@ typedef void (^ARTransactionBlock)();
 @property (nonatomic, retain) NSDate *createdAt;
 
 - (void)markAsNew;
+- (BOOL)isNew;
 
 - (BOOL)isValid;
 - (NSArray *)errors;
