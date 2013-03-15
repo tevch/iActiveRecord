@@ -282,10 +282,8 @@ static BOOL migrationsEnabled = YES;
                         NSString *sqlData = [NSString stringWithUTF8String:pszValue];
                         aValue = [column.columnClass performSelector:@selector(fromSql:) 
                                                      withObject:sqlData];
-                    }else{
-                        aValue = @"";
+                        [record setValue:aValue forKey:propertyName];
                     }
-                    [record setValue:aValue forKey:propertyName];
                 }
                 [resultArray addObject:record];
                 [record release];
@@ -329,6 +327,13 @@ static BOOL migrationsEnabled = YES;
                     
                     Class Record = NSClassFromString(recordName);
                     
+                    id currentRecord = [dictionary valueForKey:recordName];
+                    if(currentRecord == nil){
+                        currentRecord = [Record new];
+                        [dictionary setValue:currentRecord
+                                      forKey:recordName];
+                    }
+                    
                     int index = (i+1)*nColumns + j;
                     const char *pszValue = results[index];
                     if(pszValue){
@@ -338,18 +343,9 @@ static BOOL migrationsEnabled = YES;
                         NSString *sqlData = [NSString stringWithUTF8String:pszValue];
                         aValue = [column.columnClass performSelector:@selector(fromSql:) 
                                                      withObject:sqlData];
-                    }else{
-                        aValue = @"";
+                        [currentRecord setValue:aValue
+                                         forKey:propertyName];
                     }
-                    id currentRecord = [dictionary valueForKey:recordName];
-                    if(currentRecord == nil){
-                        currentRecord = [Record new];
-                        [dictionary setValue:currentRecord
-                                      forKey:recordName];
-                    }
-                    [currentRecord setValue:aValue
-                                     forKey:propertyName];
-    //                [dictionary setValue:aValue forKey:propertyName];
                 }
                 [resultArray addObject:dictionary];
                 [dictionary release];
