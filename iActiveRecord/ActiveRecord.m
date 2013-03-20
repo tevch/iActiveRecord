@@ -600,6 +600,10 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
 + (void)dropAllRecords {
     [[self allRecords] makeObjectsPerformSelector:@selector(dropRecord)];
 }
+
++ (void)dropAllRecordsWithoutCallbacks {
+    [[ARDatabaseManager sharedInstance] executeSqlQuery:[self sqlOnDeleteAll]];
+}
  
 - (void)dropRecord {
     [[ARDatabaseManager sharedInstance] executeSqlQuery:[self sqlOnDelete]];
