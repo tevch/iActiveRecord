@@ -16,6 +16,12 @@
 
 #define DEFAULT_DBNAME @"database"
 
+#if 0
+    #define SQLLog NSLog
+#else
+    #define SQLLog //NSLog
+#endif
+
 @implementation ARDatabaseManager
 
 static BOOL useCacheDirectory = YES;
@@ -233,6 +239,7 @@ static BOOL migrationsEnabled = YES;
 }
 
 - (void)executeSqlQuery:(const char *)anSqlQuery {
+    SQLLog(@"execute: %s", anSqlQuery);
     dispatch_sync([ARDatabaseManager sqliteQueue], ^{
         if(SQLITE_OK != sqlite3_exec(database, anSqlQuery, NULL, NULL, NULL)){
             NSLog(@"Couldn't execute query %s : %s", anSqlQuery, sqlite3_errmsg(database));
@@ -251,6 +258,7 @@ static BOOL migrationsEnabled = YES;
 }
 
 - (NSArray *)allRecordsWithName:(NSString *)aName withSql:(NSString *)aSqlRequest{
+    SQLLog(@"read: %@", aSqlRequest);
     __block NSMutableArray *resultArray = nil;
     dispatch_sync([ARDatabaseManager sqliteQueue], ^{
         NSString *propertyName;
@@ -269,25 +277,34 @@ static BOOL migrationsEnabled = YES;
         {
             resultArray = [NSMutableArray arrayWithCapacity:nRows++];
             Record = NSClassFromString(aName);
+            BOOL hasColumns = NO;
+            Class *columnClasses = malloc(sizeof(Class) * nColumns);
             for(int i=0;i<nRows-1;i++){
                 id record = [Record new];
                 for(int j=0;j<nColumns;j++){
                     propertyName = [NSString stringWithUTF8String:results[j]];
+
+                    if (!hasColumns) {
+                        ARColumn *column = [Record performSelector:@selector(columnNamed:)
+                                                        withObject:propertyName];
+                        columnClasses[j] = column.columnClass;
+                    }
+
                     int index = (i+1)*nColumns + j;
                     const char *pszValue = results[index];
                     
                     if(pszValue){
-                        ARColumn *column = [Record performSelector:@selector(columnNamed:) 
-                                                        withObject:propertyName];
                         NSString *sqlData = [NSString stringWithUTF8String:pszValue];
-                        aValue = [column.columnClass performSelector:@selector(fromSql:) 
+                        aValue = [columnClasses[j] performSelector:@selector(fromSql:)
                                                      withObject:sqlData];
                         [record setValue:aValue forKey:propertyName];
                     }
                 }
+                hasColumns = YES;
                 [resultArray addObject:record];
                 [record release];
             }
+            free(columnClasses);
             sqlite3_free_table(results);
         }else
         {
@@ -299,6 +316,7 @@ static BOOL migrationsEnabled = YES;
 }
 
 - (NSArray *)joinedRecordsWithSql:(NSString *)aSqlRequest {
+    SQLLog(@"joined SQL: %@", aSqlRequest);
     __block NSMutableArray *resultArray = nil;
     dispatch_sync([ARDatabaseManager sqliteQueue], ^{
         NSString *propertyName;
