@@ -40,6 +40,7 @@ static NSMutableDictionary *relationshipsDictionary = nil;
 @implementation ActiveRecord
 
 migration_helper
+index_field_helper
 
 @synthesize id;
 @synthesize createdAt;
@@ -50,6 +51,7 @@ migration_helper
 + (void)initialize {
     [super initialize];    
     [self initIgnoredFields];
+    [self initIndexedFields];
     if([self conformsToProtocol:@protocol(ARValidatableProtocol)]){
         [self performSelector:@selector(initValidations)];
     }
@@ -232,6 +234,18 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
     [ignoredFields addObject:aField];
 }
 
+# pragma mark - Indexed fields
+
++ (void)initIndexedFields {
+}
+
++ (void)indexField:(NSString *)aField {
+    if(nil == indexedFields){
+        indexedFields = [[NSMutableSet alloc] init];
+    }
+    [indexedFields addObject:aField];
+}
+
 #pragma mark - 
 
 - (void)resetErrors {
@@ -266,6 +280,7 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
 
 + (const char *)sqlOnCreate {
     [self initIgnoredFields];
+    [self initIndexedFields];
     NSMutableString *sqlString = [NSMutableString stringWithFormat:
                                   @"create table %@(id integer primary key unique ", 
                                   [[self recordName] quotedString]];
@@ -280,7 +295,20 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
             (const char *)[column.columnClass performSelector:@selector(sqlType)]];
         }
     }
-    [sqlString appendFormat:@")"];
+    
+    [sqlString appendFormat:@"); "];
+    
+    NSArray *indexes = [self indexes];
+    for(ARColumn *index in indexes){
+        NSString *direction;
+        if ([index.columnName isEqualToString:@"date"])
+            direction = @"DESC";
+        else
+            direction = @"ASC";
+            
+        [sqlString appendFormat:@"CREATE INDEX %@ ON %@ (%@ %@); ", [[NSString stringWithFormat:@"index_on_%@_%@", [self recordName], index.columnName] quotedString], [[self recordName] quotedString], [index.columnName quotedString], direction];
+    }
+    
     return [sqlString UTF8String];
 }
 
@@ -655,6 +683,14 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
     return [[ARSchemaManager sharedInstance] columnsForRecord:self];
 }
 
+- (NSArray *)indexes {
+    return [[self class] indexes];
+}
+
++ (NSArray *)indexes {
+    return [[ARSchemaManager sharedInstance] indexesForRecord:self];
+}
+
 - (ARColumn *)columnNamed:(NSString *)aColumnName {
     return [[self class] columnNamed:aColumnName];
 }
@@ -667,6 +703,10 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
 
 + (NSArray *)ignoredFields {
     return [ignoredFields allObjects];
+}
+
++ (NSArray *)indexedFields {
+    return [indexedFields allObjects];
 }
 
 @end

@@ -24,6 +24,7 @@ static NSString* joinString(ARJoinType type)
     NSString *sqlRequest;
     //  order by
     NSMutableDictionary *orderByConditions;
+    NSMutableDictionary *orderByCaseSensitive;
     //  select
     NSMutableSet *onlyFields;
     NSMutableSet *exceptFields;

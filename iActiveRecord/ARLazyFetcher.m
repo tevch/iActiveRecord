@@ -26,6 +26,7 @@
         offset = nil;
         sqlRequest = nil;
         orderByConditions = nil;
+        orderByCaseSensitive = nil;
         useJoin = NO;
     }
     return self;
@@ -53,6 +54,7 @@
     [exceptFields release];
     [whereStatement release];
     [orderByConditions release];
+    [orderByCaseSensitive release];
     [sqlRequest release];
     [limit release];
     [offset release];
@@ -112,16 +114,26 @@
     NSMutableString *statement = [NSMutableString string];
     if(orderByConditions){
         [statement appendFormat:@" ORDER BY "];
+        
         for(NSString *key in [orderByConditions allKeys]){
             NSString *order = [[orderByConditions valueForKey:key] boolValue] ? @"ASC" : @"DESC";
-            [statement appendFormat:
-             @" %@.%@ %@ ,", 
-             [[recordClass performSelector:@selector(recordName)] quotedString], 
-             [key quotedString], 
-             order];
+            
+            if ([[orderByCaseSensitive valueForKey:key] boolValue] == NO)
+                [statement appendFormat:
+                 @" lower(%@.%@) %@ ,",
+                 [[recordClass performSelector:@selector(recordName)] quotedString],
+                 [key quotedString],
+                 order];
+            else
+                [statement appendFormat:
+                 @" %@.%@ %@ ,", 
+                 [[recordClass performSelector:@selector(recordName)] quotedString], 
+                 [key quotedString], 
+                 order];
         }
         [statement replaceCharactersInRange:NSMakeRange(statement.length - 1, 1) withString:@""];
     }
+    
     return statement;
 }
 
@@ -374,18 +386,31 @@
 
 - (ARLazyFetcher *)orderBy:(NSString *)aField
                  ascending:(BOOL)isAscending
+             caseSensitive:(BOOL)isCaseSensitive
 {
     if(orderByConditions == nil){
         orderByConditions = [NSMutableDictionary new];
+        orderByCaseSensitive = [NSMutableDictionary new];
     }
     NSNumber *ascending = [NSNumber numberWithBool:isAscending];
     [orderByConditions setValue:ascending
                          forKey:aField];
+    
+    NSNumber *caseSensitive = [NSNumber numberWithBool:isCaseSensitive];
+    [orderByCaseSensitive setValue:caseSensitive
+                            forKey:aField];
+    
     return self;
 }
 
+- (ARLazyFetcher *)orderBy:(NSString *)aField
+                 ascending:(BOOL)isAscending
+{
+    return [self orderBy:aField ascending:isAscending caseSensitive:YES];
+}
+
 - (ARLazyFetcher *)orderBy:(NSString *)aField {
-    return [self orderBy:aField ascending:YES];
+    return [self orderBy:aField ascending:YES caseSensitive:YES];
 }
 
 #pragma mark - Select

@@ -75,7 +75,8 @@ typedef enum {
                 onField:(NSString *)aFirstField 
                andField:(NSString *)aSecondField;
 
-- (ARLazyFetcher *)orderBy:(NSString *)aField ascending:(BOOL)isAscending;
+- (ARLazyFetcher *)orderBy:(NSString *)aField ascending:(BOOL)isAscending caseSensitive:(BOOL)isCaseSensitive;
+- (ARLazyFetcher *)orderBy:(NSString *)aField ascending:(BOOL)isAscending;// case sensitive by default
 - (ARLazyFetcher *)orderBy:(NSString *)aField;// ASC by default
 
 - (ARLazyFetcher *)where:(NSString *)aCondition, ... NS_REQUIRES_NIL_TERMINATION;

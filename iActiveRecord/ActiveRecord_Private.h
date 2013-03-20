@@ -50,6 +50,12 @@
 + (void)ignoreField:(NSString *)aField;
 + (NSArray *)ignoredFields;
 
+#pragma mark - IndexFields
+
++ (void)initIndexedFields;
++ (void)indexField:(NSString *)aField;
++ (NSArray *)indexedFields;
+
 #pragma mark - TableName
 
 + (NSString *)recordName;
