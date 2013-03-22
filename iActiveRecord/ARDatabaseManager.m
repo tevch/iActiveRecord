@@ -318,6 +318,7 @@ static BOOL migrationsEnabled = YES;
 - (NSArray *)joinedRecordsWithSql:(NSString *)aSqlRequest {
     SQLLog(@"joined SQL: %@", aSqlRequest);
     __block NSMutableArray *resultArray = nil;
+    __block NSMutableArray *columnTypesArray = nil;
     dispatch_sync([ARDatabaseManager sqliteQueue], ^{
         NSString *propertyName;
         NSString *header;
@@ -334,6 +335,7 @@ static BOOL migrationsEnabled = YES;
                                           NULL))
         {
             resultArray = [NSMutableArray arrayWithCapacity:nRows++];
+            columnTypesArray = [NSMutableArray array];
             for(int i=0;i<nRows-1;i++){
                 NSMutableDictionary *dictionary = [NSMutableDictionary new];
                 NSString *recordName = nil;
@@ -354,12 +356,22 @@ static BOOL migrationsEnabled = YES;
                     
                     int index = (i+1)*nColumns + j;
                     const char *pszValue = results[index];
+
+                    // Cache column class types as we iterate over many records
+                    Class columnClass;
+                    if (columnTypesArray.count == j){
+                        ARColumn *column = [Record
+                                            performSelector:@selector(columnNamed:)
+                                            withObject:propertyName];
+                        columnClass = column.columnClass;
+                        [columnTypesArray addObject:columnClass];
+                    } else {
+                        columnClass = columnTypesArray[j];
+                    }
+                    
                     if(pszValue){
-                        ARColumn *column = [Record 
-                                                       performSelector:@selector(columnNamed:) 
-                                                            withObject:propertyName];
                         NSString *sqlData = [NSString stringWithUTF8String:pszValue];
-                        aValue = [column.columnClass performSelector:@selector(fromSql:) 
+                        aValue = [columnClass performSelector:@selector(fromSql:) 
                                                      withObject:sqlData];
                         [currentRecord setValue:aValue
                                          forKey:propertyName];
