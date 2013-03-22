@@ -696,9 +696,7 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
 }
 
 + (ARColumn *)columnNamed:(NSString *)aColumnName {
-    NSArray *columns = [self columns];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"columnName = %@", aColumnName];
-    return [[columns filteredArrayUsingPredicate:predicate] first];
+    return [[ARSchemaManager sharedInstance] columnNamed:aColumnName forRecord:self];
 }
 
 + (NSArray *)ignoredFields {

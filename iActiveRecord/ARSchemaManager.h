@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class ARColumn;
+
 @interface ARSchemaManager : NSObject
 
 @property (nonatomic, retain) NSMutableDictionary *schemes;
@@ -17,6 +19,7 @@
 
 - (void)registerSchemeForRecord:(Class)aRecordClass;
 - (NSArray *)columnsForRecord:(Class)aRecordClass;
+- (ARColumn *)columnNamed:(NSString *)aColumnName forRecord:(Class)aRecordClass;
 - (NSArray *)indexesForRecord:(Class)aRecordClass;
 
 @end
