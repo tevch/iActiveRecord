@@ -11,5 +11,6 @@
 @interface NSString (quotedString)
 
 - (NSString *)quotedString;
+- (NSString *)literalQuotedString;
 
 @end

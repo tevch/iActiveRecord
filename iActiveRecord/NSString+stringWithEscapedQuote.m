@@ -14,4 +14,8 @@
     return [self stringByReplacingOccurrencesOfString:@"\"" withString:@"\"\""];
 }
 
+- (NSString *)literalStringWithEscapedQuote {
+    return [self stringByReplacingOccurrencesOfString:@"\'" withString:@"\'\'"];
+}
+
 @end

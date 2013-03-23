@@ -26,8 +26,8 @@
     NSMutableArray *sqlValues = [NSMutableArray arrayWithCapacity:aValues.count];
     for(id value in aValues){
         [sqlValues addObject:[[[value performSelector:@selector(toSql)] 
-                               stringWithEscapedQuote] 
-                              quotedString]];
+                               literalStringWithEscapedQuote]
+                              literalQuotedString]];
     }
     NSString *values = [sqlValues componentsJoinedByString:@" , "];
     NSString *stmt = [NSString stringWithFormat:@" %@ %@ (%@)", 
@@ -57,8 +57,8 @@
                       @" %@ = %@ ",
                       [aField quotedString],
                       [[[aValue performSelector:@selector(toSql)] 
-                        stringWithEscapedQuote] 
-                       quotedString]];
+                        literalStringWithEscapedQuote]
+                       literalQuotedString]];
     return [ARWhereStatement statement:stmt];
 }
 
@@ -107,8 +107,8 @@
                       @" %@ <> %@ ",
                       [aField quotedString],
                       [[[aValue performSelector:@selector(toSql)] 
-                        stringWithEscapedQuote]
-                       quotedString]];
+                        literalStringWithEscapedQuote]
+                       literalQuotedString]];
     return [ARWhereStatement statement:stmt];
 }
 
@@ -131,8 +131,8 @@
                       [[aRecord performSelector:@selector(recordName)] quotedString],
                       [aField quotedString],
                       [[[aValue performSelector:@selector(toSql)] 
-                        stringWithEscapedQuote] 
-                       quotedString]];
+                        literalStringWithEscapedQuote]
+                       literalQuotedString]];
     return [ARWhereStatement statement:stmt];
 }
 
@@ -143,8 +143,8 @@
                       [[aRecord performSelector:@selector(recordName)] quotedString],
                       [aField quotedString],
                       [[[aValue performSelector:@selector(toSql)] 
-                        stringWithEscapedQuote] 
-                       quotedString]];
+                        literalStringWithEscapedQuote]
+                       literalQuotedString]];
     return [ARWhereStatement statement:stmt];
 }
 

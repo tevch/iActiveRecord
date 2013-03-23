@@ -351,8 +351,8 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
     }
     [sqlString appendFormat:@"%@", [column.columnName quotedString]];
     [sqlValues appendFormat:@"%@", [[[propertyValue performSelector:@selector(toSql)] 
-                                     stringWithEscapedQuote] 
-                                    quotedString]];
+                                     literalStringWithEscapedQuote]
+                                    literalQuotedString]];
     
     for(;index < [existedProperties count];index++){
         column = [existedProperties objectAtIndex:index];
@@ -362,8 +362,8 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
         }
         [sqlString appendFormat:@", %@", [column.columnName quotedString]];
         [sqlValues appendFormat:@", %@", [[[propertyValue performSelector:@selector(toSql)] 
-                                           stringWithEscapedQuote] 
-                                          quotedString]];
+                                           literalStringWithEscapedQuote]
+                                          literalQuotedString]];
     }
     [existedProperties release];
     [sqlValues appendString:@") "];
@@ -381,16 +381,16 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
     id propertyValue = [self valueForKey:propertyName];
     [sqlString appendFormat:@"%@=%@", [propertyName quotedString], 
      [[[propertyValue performSelector:@selector(toSql)] 
-       stringWithEscapedQuote] 
-      quotedString]];
+       literalStringWithEscapedQuote]
+      literalQuotedString]];
    
     for(;index<[updatedValues count];index++){
         propertyName = [updatedValues objectAtIndex:index];
         propertyValue = [self valueForKey:propertyName];
         [sqlString appendFormat:@", %@=%@", [propertyName quotedString], 
          [[[propertyValue performSelector:@selector(toSql)] 
-           stringWithEscapedQuote] 
-          quotedString]];
+           literalStringWithEscapedQuote]
+          literalQuotedString]];
     }
     [sqlString appendFormat:@" WHERE id = %@", self.id];
     return [sqlString UTF8String];

@@ -11,5 +11,6 @@
 @interface NSString (stringWithEscapedQuote)
 
 - (NSString *)stringWithEscapedQuote;
+- (NSString *)literalStringWithEscapedQuote;
 
 @end
