@@ -14,4 +14,10 @@
     return [NSString stringWithFormat:@"\"%@\"", self];
 }
 
+- (NSString *)literalQuotedString {
+    return [NSString stringWithFormat:@"\'%@\'", self];
+}
+
+# warning quotedString fails to correctly escape literal strings - for instance, if you have a friend with the first name "Email", then iActiveRecord will set his first name to be equal to his email address. Literal strings need to be escaped with single quotes. The function stringWithEscapedQuote also needs to be updated to reflect this change.
+
 @end
