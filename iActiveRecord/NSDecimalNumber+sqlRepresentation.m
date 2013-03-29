@@ -11,7 +11,7 @@
 @implementation NSDecimalNumber (sqlRepresentation)
 
 - (NSString *)toSql {
-    return [NSString stringWithFormat:@"%f", [self floatValue]];
+    return [self stringValue];
 }
 
 + (const char *)sqlType {
