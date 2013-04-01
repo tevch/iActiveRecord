@@ -211,6 +211,16 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
     return isNew;
 }
 
+- (void)markAllColumnsChanged; {
+    for (ARColumn *column in self.columns) {
+        NSString *columnName = column.columnName;
+        if ([columnName isEqual:@"id"] || [columnName isEqual:@"updatedAt"] || [columnName isEqual:@"createdAt"]) {
+            continue;
+        }
+        [self didChangeField:columnName];
+    }
+}
+
 
 #pragma mark - ObserveChanges
 

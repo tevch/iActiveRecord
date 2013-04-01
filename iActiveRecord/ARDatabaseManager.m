@@ -16,7 +16,7 @@
 
 #define DEFAULT_DBNAME @"database"
 
-#if 0
+#if 1
     #define SQLLog NSLog
 #else
     #define SQLLog //NSLog

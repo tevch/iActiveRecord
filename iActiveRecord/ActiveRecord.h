@@ -37,6 +37,7 @@ typedef void (^ARTransactionBlock)();
 
 - (void)markAsNew;
 - (BOOL)isNew;
+- (void)markAllColumnsChanged;
 
 - (BOOL)isValid;
 - (NSArray *)errors;
