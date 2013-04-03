@@ -28,6 +28,6 @@ static NSArray *class_getSubclasses(Class parentClass) {
         }
         [result addObject:classes[i]];
     }
-//    free(classes);
+    free(classes);
     return result;
 }

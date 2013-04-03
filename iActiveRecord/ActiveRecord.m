@@ -195,6 +195,8 @@ static NSString *registerHasManyThrough = @"_ar_registerHasManyThrough";
 
 - (void)dealloc {
     self.id = nil;
+    self.updatedAt = nil;
+    self.createdAt = nil;
     [errors release];
     [changedFields release];
     for (ARColumn* column in self.columns) {
