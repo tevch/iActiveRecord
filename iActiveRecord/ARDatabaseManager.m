@@ -17,7 +17,7 @@
 #define DEFAULT_DBNAME @"database"
 
 #if 0
-    #define SQLLog NSLog
+    #define SQLLog(fmt, ...) NSLog(fmt, ##__VA_ARGS__)
 #else
     #define SQLLog //NSLog
 #endif
