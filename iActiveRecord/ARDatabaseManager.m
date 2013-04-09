@@ -19,7 +19,7 @@
 #if 0
     #define SQLLog(fmt, ...) NSLog(fmt, ##__VA_ARGS__)
 #else
-    #define SQLLog //NSLog
+    #define SQLLog(fmt, ...) //NSLog(fmt, ##__VA_ARGS__)
 #endif
 
 @implementation ARDatabaseManager
