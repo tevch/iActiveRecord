@@ -228,13 +228,13 @@ SQLITE_EXPORT int sqlite3_unicode_init(sqlite3 *db);
 ** <sqlite3_unicode>
 ** The following function needs to be called at application startup to load the extension.
 */
-SQLITE_EXPORT int sqlite3_unicode_load();
+SQLITE_EXPORT int sqlite3_unicode_load(void);
 
 /*
 ** <sqlite3_unicode>
 ** The following function needs to be called before application exit to unload the extension.
 */
-SQLITE_EXPORT void sqlite3_unicode_free();
+SQLITE_EXPORT void sqlite3_unicode_free(void);
 
 #ifdef __cplusplus
 }

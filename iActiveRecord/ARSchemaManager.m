@@ -9,6 +9,7 @@
 #import "ARSchemaManager.h"
 #import "ARColumn_Private.h"
 #import "NSMutableDictionary+valueToArray.h"
+#import "ActiveRecord_Private.h"
 
 @implementation ARSchemaManager {
     NSMutableDictionary *_columnLookup;

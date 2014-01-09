@@ -13,6 +13,7 @@
 #include <sys/xattr.h>
 #import "sqlite3_unicode.h"
 #import "ARColumn.h"
+#import "ActiveRecord_Private.h"
 
 #define DEFAULT_DBNAME @"database"
 

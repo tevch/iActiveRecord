@@ -10,6 +10,7 @@
 #import "ARWhereStatement_Private.h"
 #import "NSString+quotedString.h"
 #import "NSString+stringWithEscapedQuote.h"
+#import "ActiveRecord_Private.h"
 
 @implementation ARWhereStatement
 

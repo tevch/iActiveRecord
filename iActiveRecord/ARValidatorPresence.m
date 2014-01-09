@@ -17,7 +17,10 @@
 
 - (BOOL)validateField:(NSString *)aField ofRecord:(id)aRecord {
     id aValue = [aRecord valueForKey:aField];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
     return (BOOL)[aValue performSelector:@selector(isPresented)];
+#pragma clang diagnostic pop
 }
 
 @end

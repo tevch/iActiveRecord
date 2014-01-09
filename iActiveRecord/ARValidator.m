@@ -9,6 +9,7 @@
 #import "ARValidator.h"
 #import "ARValidation.h"
 #import "ActiveRecord.h"
+#import "ActiveRecord_Private.h"
 
 @interface ARValidator ()
 {
