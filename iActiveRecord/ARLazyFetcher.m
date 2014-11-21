@@ -139,13 +139,13 @@
 
 - (NSString *)createLimitOffsetStatement {
     NSMutableString *statement = [NSMutableString string];
-    NSInteger limitNum = -1;
+    int limitNum = -1;
     if(limit){
-        limitNum = limit.integerValue;
+        limitNum = limit.intValue;
     }
     [statement appendFormat:@" LIMIT %d ", limitNum];
     if(offset){
-        [statement appendFormat:@" OFFSET %d ", offset.integerValue];
+        [statement appendFormat:@" OFFSET %d ", offset.intValue];
     }
     return statement;
 }
@@ -534,11 +534,25 @@
     }
     va_end(args);
 
-    char *argList = (char *)malloc(sizeof(NSString *) * [sqlArguments count]);
-    [sqlArguments getObjects:(id *)argList];
-    NSString* result = [[[NSString alloc] initWithFormat:aCondition
-                                               arguments:argList] autorelease];
-    free(argList);
+#ifdef __x86_64__
+    NSString* result = aCondition;
+    NSRange testRange = NSMakeRange(0, result.length);
+    
+    for (int i = 0; i < sqlArguments.count; i++) {
+        NSRange range = [result rangeOfString:@"%@" options:NSLiteralSearch range:testRange];
+        result = [result stringByReplacingCharactersInRange:range withString:[sqlArguments objectAtIndex:i]];
+        //move the test range up to the last character of the replacement
+        NSUInteger prefix = range.location + [[sqlArguments objectAtIndex:i] length];
+        testRange = NSMakeRange(prefix, result.length - prefix);
+    }
+    NSLog(@"result: %@", result);
+#else
+    NSRange range = NSMakeRange(0, [sqlArguments count]);
+    NSMutableData * data = [NSMutableData dataWithLength:sizeof(id) * [sqlArguments count]];
+    [sqlArguments getObjects: (__unsafe_unretained id *)data.mutableBytes range:range];
+    NSString * result = [[NSString alloc] initWithFormat:aCondition
+                                               arguments:data.mutableBytes];
+#endif
     
     ARWhereStatement *where = [ARWhereStatement statement:result];
     
