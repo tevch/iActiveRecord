@@ -98,7 +98,7 @@
 		CA62C325151E0EC400E54276 /* NSString+sqlRepresentation.h in Headers */ = {isa = PBXBuildFile; fileRef = 254F5EBA14C5E71C00AC0D86 /* NSString+sqlRepresentation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		CA62C327151E0EC400E54276 /* ActiveRecord.h in Headers */ = {isa = PBXBuildFile; fileRef = 25998EE014BC1A1D00CA2490 /* ActiveRecord.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CA62C328151E0EC400E54276 /* ARLazyFetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = CA3D18041519D5FA00FA3F3C /* ARLazyFetcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CA62C32B151E0EC400E54276 /* ARDatabaseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 25998EE214BC1A1D00CA2490 /* ARDatabaseManager.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		CA62C32B151E0EC400E54276 /* ARDatabaseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 25998EE214BC1A1D00CA2490 /* ARDatabaseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CA62C32C151E0EC400E54276 /* ARErrorHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 25A1132614D9BCF7000720E7 /* ARErrorHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CA62C32D151E0EC400E54276 /* class_getSubclasses.h in Headers */ = {isa = PBXBuildFile; fileRef = 2598294114BDDB4200207D16 /* class_getSubclasses.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		CA62C32E151E0EC400E54276 /* ARRelationshipsHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 25998EE414BC1A1D00CA2490 /* ARRelationshipsHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -855,12 +855,12 @@
 				CAB56AF2153E7ABE0062DC9E /* NSData+Base64.h in Headers */,
 				CA62C324151E0EC400E54276 /* NSString+lowercaseFirst.h in Headers */,
 				DB78C39D16D7371700FAE89D /* ARIndicesMacroHelper.h in Headers */,
+				CA62C32B151E0EC400E54276 /* ARDatabaseManager.h in Headers */,
 				CA523E0A15373A5500565E02 /* sqlite3_unicode.h in Headers */,
 				CA62C32D151E0EC400E54276 /* class_getSubclasses.h in Headers */,
 				CAF24818151F383000120198 /* NSData+sqlRepresentation.h in Headers */,
 				CA62C320151E0EC400E54276 /* NSDecimalNumber+sqlRepresentation.h in Headers */,
 				CA62C321151E0EC400E54276 /* NSNumber+sqlRepresentation.h in Headers */,
-				CA62C32B151E0EC400E54276 /* ARDatabaseManager.h in Headers */,
 				CABB909C1520DA6600E8D082 /* ARRelationBelongsTo.h in Headers */,
 				CABB90A21520E63200E8D082 /* ARRelationHasMany.h in Headers */,
 				CABB90B21520F60700E8D082 /* ARRelationHasManyThrough.h in Headers */,
@@ -1355,6 +1355,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				BUILD_VARIANTS = normal;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1365,6 +1366,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";

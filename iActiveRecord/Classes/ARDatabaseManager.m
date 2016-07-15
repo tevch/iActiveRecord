@@ -250,7 +250,6 @@ static NSArray *records = nil;
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     return ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
 }
-
 - (NSArray *)allRecordsWithName:(NSString *)aName withSql:(NSString *)aSqlRequest{
     __block NSMutableArray *resultArray = nil;
     
@@ -275,6 +274,9 @@ static NSArray *records = nil;
             NSMutableArray *columns = [NSMutableArray arrayWithCapacity:nColumns];
             NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
             [formatter setNumberStyle:NSNumberFormatterNoStyle];
+            //NSLog(@"%@", [formatter locale].localeIdentifier);
+            [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
+            //NSLog(@"%@", [formatter locale].localeIdentifier);
 
             for(int i=0;i<nRows-1;i++){
                 id record = [Record new];
@@ -292,11 +294,23 @@ static NSArray *records = nil;
 
                     if(pszValue){
                         NSString *sqlData = [NSString stringWithUTF8String:pszValue];
+                        
+                        NSString *formatterType = nil;
                         if (column.columnClass) {
                             aValue = [column.columnClass performSelector:@selector(fromSql:)
                                                               withObject:sqlData];
+                            formatterType = @"Column Class";
                         } else {
                             aValue = [formatter numberFromString:sqlData];
+                            formatterType = @"NSNumberFormatter";
+                        }
+                        
+                        if([propertyName isEqualToString:@"lat"] || [propertyName isEqualToString:@"lon"]) {
+                            id<CrashlyticsLogReporter> reporter = [[ARDatabaseManager sharedInstance] crashlyticsLogReporter];
+                            NSString *message = [NSString stringWithFormat:@"propertyName = %@ formatterType=%@ sqlData=%@ aValue=%f", propertyName, formatterType, sqlData, [aValue floatValue] ];
+                            if(reporter!=nil) {
+                                [reporter logMessageWithNSString:message];
+                            }
                         }
                         [record setValue:aValue forColumn:column];
                     }

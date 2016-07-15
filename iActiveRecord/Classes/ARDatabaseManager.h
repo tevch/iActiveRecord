@@ -11,6 +11,11 @@
 
 @class ActiveRecord;
 
+@protocol CrashlyticsLogReporter
+// list of methods and properties
+- (void)logMessageWithNSString:(NSString *)msg;
+@end
+
 @interface ARDatabaseManager : NSObject
 {
     @private
@@ -18,6 +23,8 @@
     NSString *dbPath;
     NSString *dbName;
 }
+
+@property(atomic, retain) id<CrashlyticsLogReporter> crashlyticsLogReporter;
 
 + (void)disableMigrations;
 
@@ -41,6 +48,8 @@
 - (NSString *)cachesDirectory;
 
 + (id)sharedInstance;
+
+
 
 - (NSNumber *)insertRecord:(NSString *)aRecordName withSqlQuery:(const char *)anSqlQuery;
 - (NSNumber *)getLastId:(NSString *)aRecordName;

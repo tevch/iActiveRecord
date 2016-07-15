@@ -45,9 +45,9 @@
             switch (attributes[i].name[0]) {
                 case 'T':
                     if (![self setPropertyTypeFromAttribute:attributes[i].value]) {
-                        NSLog(@"Unsupported property type '%s' for column '%s'",
+                        /*NSLog(@"Unsupported property type '%s' for column '%s'",
                               attributes[i].value,
-                              propertyName);
+                              propertyName);*/
                     }
                     break;
                 case 'C': 
